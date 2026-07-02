@@ -9,6 +9,18 @@ export const GTK_POLICY_ALWAYS    = 0;
 export const GTK_POLICY_AUTOMATIC = 1;
 export const GTK_POLICY_NEVER     = 2;
 export const GTK_POLICY_EXTERNAL  = 3;
+// GtkAlign
+export const GTK_ALIGN_FILL     = 0;
+export const GTK_ALIGN_START    = 1;
+export const GTK_ALIGN_END      = 2;
+export const GTK_ALIGN_CENTER   = 3;
+export const GTK_ALIGN_BASELINE = 4;
+// GtkStyleProvider priorities
+export const GTK_STYLE_PROVIDER_PRIORITY_FALLBACK    = 1;
+export const GTK_STYLE_PROVIDER_PRIORITY_THEME       = 200;
+export const GTK_STYLE_PROVIDER_PRIORITY_SETTINGS    = 400;
+export const GTK_STYLE_PROVIDER_PRIORITY_APPLICATION = 600;
+export const GTK_STYLE_PROVIDER_PRIORITY_USER        = 800;
 // GtkWindowType
 export const GTK_WINDOW_TOPLEVEL = 0;
 export const GTK_WINDOW_POPUP    = 1;
@@ -56,7 +68,36 @@ export const gtk = dlopen('libgtk-3.so.0', {
   gtk_image_new:                { args: [], returns: FFIType.ptr },
   gtk_image_new_from_pixbuf:    { args: [FFIType.ptr], returns: FFIType.ptr },
   gtk_image_new_from_file:      { args: [FFIType.cstring], returns: FFIType.ptr },
+  gtk_image_set_from_file:      { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
   gtk_image_set_from_pixbuf:    { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.void },
+
+  // Overlay + event box for an in-window modal-style viewer. GtkOverlay
+  // stacks child widgets over a base child; GtkEventBox gives an otherwise
+  // invisible container something to catch button-press-events on (used for
+  // click-outside-to-dismiss and for eating clicks on the image itself).
+  gtk_overlay_new:              { args: [], returns: FFIType.ptr },
+  gtk_overlay_add_overlay:      { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.void },
+  gtk_event_box_new:            { args: [], returns: FFIType.ptr },
+
+  // Alignment / expand — needed for centering the image and packing the
+  // carousel across the bottom of the overlay.
+  gtk_widget_set_halign:        { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
+  gtk_widget_set_valign:        { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
+  gtk_widget_set_hexpand:       { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
+  gtk_widget_set_vexpand:       { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
+  gtk_widget_set_name:          { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
+  gtk_widget_get_allocated_width:  { args: [FFIType.ptr], returns: FFIType.i32 },
+  gtk_widget_get_allocated_height: { args: [FFIType.ptr], returns: FFIType.i32 },
+
+  // CSS provider — the only sane way to give a widget a translucent
+  // background in GTK3. Load a stylesheet keyed on widget names we set
+  // via gtk_widget_set_name, then attach to the affected style context.
+  gtk_css_provider_new:               { args: [], returns: FFIType.ptr },
+  gtk_css_provider_load_from_data:    { args: [FFIType.ptr, FFIType.cstring, FFIType.i64, FFIType.ptr], returns: FFIType.i32 },
+  gtk_widget_get_style_context:       { args: [FFIType.ptr], returns: FFIType.ptr },
+  gtk_style_context_add_provider:     { args: [FFIType.ptr, FFIType.ptr, FFIType.u32], returns: FFIType.void },
+  gtk_style_context_add_class:        { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
+  gtk_style_context_remove_class:     { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
 
   // Scrolled window (for a horizontal thumbnail strip)
   gtk_scrolled_window_new:      { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.ptr },
