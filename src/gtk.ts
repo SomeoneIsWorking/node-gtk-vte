@@ -75,4 +75,12 @@ export const gtk = dlopen('libgtk-3.so.0', {
   gtk_button_new_from_icon_name:  { args: [FFIType.cstring, FFIType.i32], returns: FFIType.ptr },
   gtk_button_set_relief:          { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
   gtk_button_set_label:           { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
+
+  // Menu (used mostly for tray menus, but any popup will do)
+  gtk_menu_new:                   { args: [], returns: FFIType.ptr },
+  gtk_menu_shell_append:          { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.void },
+  gtk_menu_item_new:              { args: [], returns: FFIType.ptr },
+  gtk_menu_item_new_with_label:   { args: [FFIType.cstring], returns: FFIType.ptr },
+  gtk_menu_item_set_label:        { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
+  gtk_separator_menu_item_new:    { args: [], returns: FFIType.ptr },
 } as const);
