@@ -31,7 +31,27 @@ export const vte = dlopen('libvte-2.91.so.0', {
   // Cosmetics
   vte_terminal_set_allow_hyperlink:  { args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
   vte_terminal_set_cursor_blink_mode:{ args: [FFIType.ptr, FFIType.i32], returns: FFIType.void },
+
+  // Regex-based click-to-open. Register a PCRE2 pattern with the terminal;
+  // on each button press, ask VTE whether the click landed on a match, and
+  // if so it returns the matched string (`g_free`d by the caller).
+  //
+  // See `vte/vte.h` — `vte_terminal_match_add_regex` returns a `tag`, which
+  // you can use to distinguish matches when you have several patterns.
+  vte_regex_new_for_match:           { args: [FFIType.cstring, FFIType.i64, FFIType.u32, FFIType.ptr], returns: FFIType.ptr },
+  vte_regex_unref:                   { args: [FFIType.ptr], returns: FFIType.ptr },
+  vte_terminal_match_add_regex:      { args: [FFIType.ptr, FFIType.ptr, FFIType.u32], returns: FFIType.i32 },
+  vte_terminal_match_check_event:    { args: [FFIType.ptr, FFIType.ptr, FFIType.ptr], returns: FFIType.ptr },
+  vte_terminal_match_set_cursor_name:{ args: [FFIType.ptr, FFIType.i32, FFIType.cstring], returns: FFIType.void },
 } as const);
+
+// PCRE2 compile-time flags relevant to `vte_regex_new_for_match`. `MULTILINE`
+// makes `^`/`$` line-anchored (the terminal buffer is one long stream) and
+// `CASELESS` gives case-insensitive matching. Neither is required for the
+// image pattern but callers usually want at least MULTILINE.
+export const PCRE2_CASELESS  = 0x00000008;
+export const PCRE2_MULTILINE = 0x00000400;
+export const PCRE2_UTF       = 0x00080000;
 
 // VteCursorBlinkMode
 export const VTE_CURSOR_BLINK_SYSTEM = 0;

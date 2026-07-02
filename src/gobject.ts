@@ -13,6 +13,12 @@ export const gobject = dlopen('libgobject-2.0.so.0', {
   g_object_unref:              { args: [FFIType.ptr], returns: FFIType.void },
 } as const);
 
+// libglib — needed to free strings VTE returns (e.g. `vte_terminal_match_check_event`
+// hands back a `g_malloc`'d char* that the caller owns).
+export const glib = dlopen('libglib-2.0.so.0', {
+  g_free: { args: [FFIType.ptr], returns: FFIType.void },
+} as const);
+
 // GConnectFlags
 export const G_CONNECT_AFTER   = 1 << 0;
 export const G_CONNECT_SWAPPED = 1 << 1;
