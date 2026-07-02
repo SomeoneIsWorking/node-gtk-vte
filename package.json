@@ -1,0 +1,31 @@
+{
+  "name": "node-gtk-vte",
+  "version": "0.1.0",
+  "description": "bun:ffi bindings for GTK3 + VTE — build native Linux terminals in TypeScript with no C++ or build step.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".":         "./src/index.ts",
+    "./gtk":     "./src/gtk.ts",
+    "./vte":     "./src/vte.ts",
+    "./gobject": "./src/gobject.ts",
+    "./helpers": "./src/helpers.ts"
+  },
+  "files": ["src", "examples", "README.md", "LICENSE"],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "smoke": "bun run examples/smoke.ts"
+  },
+  "keywords": ["gtk", "vte", "terminal", "ffi", "bun", "gtk3", "native", "gui"],
+  "author": "Baris Hamil",
+  "license": "MIT",
+  "repository": "github:SomeoneIsWorking/node-gtk-vte",
+  "peerDependencies": {
+    "bun": ">=1.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.6.0"
+  }
+}
