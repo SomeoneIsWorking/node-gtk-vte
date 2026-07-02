@@ -5,6 +5,8 @@ export * from './gtk.ts';
 export * from './vte.ts';
 export * from './gobject.ts';
 export * from './helpers.ts';
+export * from './notify.ts';
+export * from './appindicator.ts';
 
 // Re-export the FFI types callers need for signal descriptors, so they don't
 // each have to import from 'bun:ffi' too.

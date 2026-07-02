@@ -99,9 +99,31 @@ gtk.symbols.gtk_window_set_title(win, anchor(cstr('cci')) as any);
 
 ## What's bound today
 
-- **GTK 3**: `gtk_init`, `gtk_main`, `gtk_main_iteration_do`, `gtk_events_pending`, window (title/size/present/icon), widget show/hide/destroy/focus, container add/remove, box (new + pack_start/end), notebook (append/remove/current/n/page_num/nth/scrollable/reorderable), label (new/set_text/set_markup), button (new/label/icon/relief).
+- **GTK 3**: `gtk_init`, `gtk_main`, `gtk_main_iteration_do`, `gtk_events_pending`, window (title/size/present/icon), widget show/hide/destroy/focus, container add/remove, box (new + pack_start/end), notebook (append/remove/current/n/page_num/nth/scrollable/reorderable), label (new/set_text/set_markup), button (new/label/icon/relief), menu (new/shell_append/item_new_with_label/separator).
 - **VTE 2.91**: `vte_terminal_new`, `feed`, `feed_child`, `set_size`, `get_column_count`, `get_row_count`, `set_scrollback_lines`, `set_allow_hyperlink`, `set_cursor_blink_mode`.
 - **GObject**: `g_signal_connect_data`, `g_signal_handler_disconnect`, `g_object_ref`, `g_object_unref`.
+- **libnotify**: `notify_init`, `notify_uninit`, `notify_notification_new`/`show`/`close`/`update`/`set_urgency`/`set_timeout`, plus a `notifyShow({...})` one-shot wrapper.
+- **libayatana-appindicator3**: `app_indicator_new`, `set_status`, `set_label`, `set_menu`, `set_icon`, `set_title`. Loads from either `libayatana-appindicator3.so.1` or the older `libappindicator3.so.1`; `trayAvailable` tells you whether either was found so you can degrade to no-tray gracefully.
+
+```ts
+// Notifications
+import { notifyShow, NOTIFY_URGENCY_NORMAL } from 'node-gtk-vte';
+notifyShow({ appName: 'my-app', summary: 'Build done',
+             body: 'PASS in 8.4 s', urgency: NOTIFY_URGENCY_NORMAL });
+
+// Tray icon (guarded)
+import {
+  trayAvailable, appIndicator, cstr,
+  APP_INDICATOR_CATEGORY_APPLICATION_STATUS, APP_INDICATOR_STATUS_ACTIVE,
+} from 'node-gtk-vte';
+if (trayAvailable) {
+  const { symbols: ai } = appIndicator();
+  const ind = ai.app_indicator_new(cstr('my-app') as any,
+    cstr('utilities-terminal') as any, APP_INDICATOR_CATEGORY_APPLICATION_STATUS)!;
+  ai.app_indicator_set_status(ind, APP_INDICATOR_STATUS_ACTIVE);
+  // attach a GtkMenu via ai.app_indicator_set_menu(ind, menu)
+}
+```
 
 Adding a symbol is one line in the matching `dlopen({...})` block — send a PR when you hit something missing.
 
