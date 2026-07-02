@@ -4,6 +4,11 @@
 
 import { dlopen, FFIType } from 'bun:ffi';
 
+// GtkPolicyType (scrolled window scroll-bar policies)
+export const GTK_POLICY_ALWAYS    = 0;
+export const GTK_POLICY_AUTOMATIC = 1;
+export const GTK_POLICY_NEVER     = 2;
+export const GTK_POLICY_EXTERNAL  = 3;
 // GtkWindowType
 export const GTK_WINDOW_TOPLEVEL = 0;
 export const GTK_WINDOW_POPUP    = 1;
@@ -44,6 +49,18 @@ export const gtk = dlopen('libgtk-3.so.0', {
   gtk_widget_hide:              { args: [FFIType.ptr], returns: FFIType.void },
   gtk_widget_destroy:           { args: [FFIType.ptr], returns: FFIType.void },
   gtk_widget_grab_focus:        { args: [FFIType.ptr], returns: FFIType.void },
+  gtk_widget_set_size_request:  { args: [FFIType.ptr, FFIType.i32, FFIType.i32], returns: FFIType.void },
+  gtk_widget_set_tooltip_text:  { args: [FFIType.ptr, FFIType.cstring], returns: FFIType.void },
+
+  // Image (GdkPixbuf-backed; supports PNG/JPEG/etc through gdk-pixbuf loaders)
+  gtk_image_new:                { args: [], returns: FFIType.ptr },
+  gtk_image_new_from_pixbuf:    { args: [FFIType.ptr], returns: FFIType.ptr },
+  gtk_image_new_from_file:      { args: [FFIType.cstring], returns: FFIType.ptr },
+  gtk_image_set_from_pixbuf:    { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.void },
+
+  // Scrolled window (for a horizontal thumbnail strip)
+  gtk_scrolled_window_new:      { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.ptr },
+  gtk_scrolled_window_set_policy: { args: [FFIType.ptr, FFIType.i32, FFIType.i32], returns: FFIType.void },
 
   // Container / box
   gtk_container_add:            { args: [FFIType.ptr, FFIType.ptr], returns: FFIType.void },

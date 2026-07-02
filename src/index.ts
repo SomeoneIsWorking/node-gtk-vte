@@ -2,6 +2,7 @@
 //   import { gtk, vte, cstr, connect, vteFeed } from 'node-gtk-vte';
 
 export * from './gtk.ts';
+export * from './gdkpixbuf.ts';
 export * from './vte.ts';
 export * from './gobject.ts';
 export * from './helpers.ts';
