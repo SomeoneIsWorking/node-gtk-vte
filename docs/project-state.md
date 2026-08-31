@@ -1,5 +1,12 @@
 # Project state
 
+## Comparison baseline
+
+The baseline is writing and maintaining a compiled native addon, or embedding a browser terminal, to
+place a remotely driven terminal inside a Linux desktop UI. node-gtk-vte exposes GTK 3, VTE 2.91, and
+GObject directly to Bun through FFI, including the widget, byte transport, composition, and lifetime
+seams applications need.
+
 ## Current focus
 
 S005 is the current focus.
