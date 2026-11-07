@@ -134,3 +134,5 @@ Linux only. Windows and macOS need their own webview-y story (xterm.js in a webv
 ## License
 
 MIT.
+
+Built with AI assistance (Claude and other LLMs).
